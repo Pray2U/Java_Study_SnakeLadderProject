@@ -1,9 +1,8 @@
 package org.example;
 
 public interface IBoard {
-    void createBoard();
+    void createBoard(int upLadder, int downLadder);
     void clearBoard();
-    void movePlayer(int distance);
-    void setLadder(int ladderNumber);
 
+    int positionCheck(int position);
 }

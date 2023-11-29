@@ -1,6 +1,9 @@
 package org.example;
 
+
 public interface IPlayer {
-    int role();
-    void move(IBoard board, int distance);
+    void move(int distance, IBoard board);
+    boolean isFinished();
+    void initialize();
+    int getPosition();
 }
