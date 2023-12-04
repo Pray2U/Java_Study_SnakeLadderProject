@@ -9,7 +9,6 @@ public class SnakeLadderGame {
 
     private Board board = new Board();
     private List<IPlayer> players =  new ArrayList<>();
-    private Dice dice = new Dice(1, 6);
     IPlayer winner;
 
     public void startGame() {
@@ -33,7 +32,7 @@ public class SnakeLadderGame {
 
     private void startTurn() {
         for(IPlayer player : players) {
-            int distance = dice.roll();
+            int distance = Dice.roll().getNumber();
             player.move(distance, board);
             if(player.isFinished()) {
                 winner = player;

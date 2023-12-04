@@ -1,19 +1,37 @@
 package org.example.network;
 
+import javax.swing.*;
 import java.net.Socket;
 
+
 public class Client {
+    public Client(JTextArea console) {
+        this.console = console;
+    }
+
+    private Socket socket;
+    private Sender sender;
+    private Receiver receiver;
+    private JTextArea console;
     public void connect(String serverIp) {
         try {
-            Socket socket = new Socket(serverIp, 7777);
+            socket = new Socket(serverIp, 7777);
             System.out.println("서버에 연결되었습니다.");
-            Sender sender = new Sender(socket);
-            Receiver receiver = new Receiver(socket);
+            sender = new Sender(socket, console);
+            receiver = new Receiver(socket, console);
 
-            sender.start();
             receiver.start();
+
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void send(String str) {
+        sender.send(str);
+    }
+
+    public String getLocalAddress() {
+        return socket.getLocalAddress() + ":" + socket.getLocalPort();
     }
 }

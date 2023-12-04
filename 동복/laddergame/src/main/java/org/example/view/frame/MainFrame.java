@@ -1,6 +1,6 @@
 package org.example.view.frame;
 
-import org.example.view.frame.component.MainPanel;
+import org.example.view.Panel.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +13,8 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         setTitle("뱀 사다리 게임");
         setSize(MAIN_WIDTH, MAIN_HEIGHT);
-        setLayout(null);
-
+        setLocationRelativeTo(null);
+        setResizable(false);
         setMainPanel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -23,11 +23,9 @@ public class MainFrame extends JFrame {
     }
 
     private void setMainPanel() {
-
         MainPanel mainPanel = new MainPanel();
         mainPanel.setSize(MAIN_WIDTH, MAIN_HEIGHT);
         mainPanel.setBackgroundImage("images/mainBackground.jpg");
         add(mainPanel, BorderLayout.CENTER);
     }
-
 }

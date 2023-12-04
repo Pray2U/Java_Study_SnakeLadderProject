@@ -1,14 +1,10 @@
-package org.example.view.frame.component;
+package org.example.view.component;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Button extends JButton{
-    public Button() { super(); decorate(); }
-    public Button(String text) { super(text); decorate(); }
-    public Button(Action action) { super(action); decorate(); }
-    public Button(Icon icon) { super(icon); decorate(); }
-    public Button(String text, Icon icon) { super(text, icon); decorate(); }
+public class CustomButton extends JButton{
+    public CustomButton(String text) { super(text); decorate(); }
     protected void decorate() { setBorderPainted(false); setOpaque(false); }
     @Override
     protected void paintComponent(Graphics g) {

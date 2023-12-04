@@ -1,28 +1,40 @@
 package org.example.network;
 
+import javax.swing.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server extends Thread{
+    private Sender sender;
+    private Receiver receiver;
+    private JTextArea console;
 
-    public static void run() {
-
-        ServerSocket serverSocket = null;
-        Socket socket = null;
+    @Override
+    public void run() {
 
         try {
+            ServerSocket serverSocket = null;
+            Socket socket = null;
             serverSocket = new ServerSocket(7777);
-            System.out.println("서버가 준비되었습니다.");
+            console.append("서버가 준비되었습니다.");
 
             socket = serverSocket.accept();
 
-            Sender sender = new Sender(socket);
-            Receiver receiver = new Receiver(socket);
+            sender = new Sender(socket, console);
+            receiver = new Receiver(socket, console);
 
-            sender.start();
             receiver.start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setConsole(JTextArea jTextArea){
+        console = jTextArea;
+    }
+
+    public void send(String str) {
+        sender.send(str);
     }
 }

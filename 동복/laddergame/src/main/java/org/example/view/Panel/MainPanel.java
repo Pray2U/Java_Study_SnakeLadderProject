@@ -1,7 +1,12 @@
-package org.example.view.frame.component;
+package org.example.view.Panel;
+
+import org.example.view.frame.FindRoomFrame;
+import org.example.view.component.CustomButton;
+import org.example.view.frame.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class MainPanel extends JPanel {
     Image backgroundImg;
@@ -17,8 +22,8 @@ public class MainPanel extends JPanel {
         //배경이미지 그리기
         g.drawImage(backgroundImg, 0, 0, this);
         setLogo();
-        setButton("방 만들기", 200, 500);
-        setButton("게임 참가하기", 200, 300);
+        setButton("방 만들기", 200, 500, popUpCreateRoomFrame());
+        setButton("게임 참가하기", 200, 300, popUpFindRoomFrame());
     }
 
     private void setLogo() {
@@ -40,10 +45,19 @@ public class MainPanel extends JPanel {
         add(imgLabel);
     }
 
-    private void setButton(String text, int x, int y) {
-        Button mainButton = new Button(text);
+    private void setButton(String text, int x, int y, ActionListener e) {
+        CustomButton mainButton = new CustomButton(text);
+        mainButton.addActionListener(e);
         mainButton.setBounds(x, y, 300, 100);
         mainButton.setFont(new Font("Default", Font.BOLD, 20));
         add(mainButton);
+    }
+
+    public ActionListener popUpCreateRoomFrame() {
+        return e -> new GameFrame();
+    }
+
+    public ActionListener popUpFindRoomFrame() {
+        return e -> new FindRoomFrame();
     }
 }

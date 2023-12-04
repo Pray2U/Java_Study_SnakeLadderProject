@@ -1,16 +1,19 @@
 package org.example.network;
 
+import javax.swing.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Sender extends Thread{
-    Socket socket;
-    DataOutputStream out;
-    String name;
+public class Sender{
+    private Socket socket;
+    private DataOutputStream out;
+    private String name;
+    private JTextArea console;
 
-    public Sender(Socket socket) {
+    public Sender(Socket socket, JTextArea console) {
+        this.console = console;
         this.socket = socket;
 
         try {
@@ -21,15 +24,13 @@ public class Sender extends Thread{
         }
     }
 
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
-        while (out!=null) {
-            try {
-                out.writeUTF(name + scanner.nextLine());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void send(String str) {
+        try {
+            console.append(str);
+            out.writeUTF(str);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
 }
+
