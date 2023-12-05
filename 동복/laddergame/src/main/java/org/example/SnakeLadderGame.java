@@ -2,41 +2,56 @@ package org.example;
 
 import org.example.model.Dice;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SnakeLadderGame {
 
     private Board board = new Board();
-    private List<IPlayer> players =  new ArrayList<>();
+    private IPlayer currentPlayer;
+    private IPlayer opponentPlayer;
     IPlayer winner;
 
+    public void setCurrentPlayer(IPlayer player) {
+        this.currentPlayer = player;
+    }
+
+    public void setOpponentPlayer(IPlayer player) {
+        this.opponentPlayer = player;
+    }
+
     public void startGame() {
-        initializeGame();
-
-        while (winner == null) {
-            startTurn();
-        }
-    }
-
-    public void joinPlayer(IPlayer player) {
-        players.add(player);
-    }
-
-    private void initializeGame() {
-        players.forEach(IPlayer::initialize);
+        currentPlayer.initialize();
+        opponentPlayer.initialize();
         board.clearBoard();
         board.createBoard(2, 3);
         winner = null;
     }
 
-    private void startTurn() {
-        for(IPlayer player : players) {
+    public Board getBoard() {
+        return board;
+    }
+
+    public void startTurn(boolean myTurn) {
+
+        IPlayer curPlayer;
+        IPlayer nextPlayer;
+
+        if(myTurn) {
+            curPlayer = currentPlayer;
+            nextPlayer = opponentPlayer;
+        }else {
+            curPlayer = opponentPlayer;
+            nextPlayer = currentPlayer;
+        }
+
+        if (curPlayer.getTurn()) {
             int distance = Dice.roll().getNumber();
-            player.move(distance, board);
-            if(player.isFinished()) {
-                winner = player;
+            curPlayer.move(distance, board);
+
+            if (curPlayer.isFinished()) {
+                winner = curPlayer;
             }
+
+            curPlayer.setTurn(false);
+            nextPlayer.setTurn(true);
         }
     }
 

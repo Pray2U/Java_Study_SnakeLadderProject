@@ -22,7 +22,7 @@ public class Ladder {
         int num1 = getRandomPosition();
         int num2 = getRandomPosition();
 
-        while(num1 == num2 || Math.abs(num1 - num2) > 20) {
+        while(num1 == num2 || Math.abs(num1 - num2) > 30) {
             num2 = getRandomPosition();
         }
 

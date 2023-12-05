@@ -11,6 +11,13 @@ import java.awt.event.ActionListener;
 public class MainPanel extends JPanel {
     Image backgroundImg;
 
+    public MainPanel() {
+        setLayout(null);
+        setLogo();
+        setButton("방 만들기", 200, 500, popUpCreateRoomFrame());
+        setButton("게임 참가하기", 200, 300, popUpFindRoomFrame());
+    }
+
     public void setBackgroundImage(String url) {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image img = toolkit.getImage(url);
@@ -19,11 +26,10 @@ public class MainPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         //배경이미지 그리기
         g.drawImage(backgroundImg, 0, 0, this);
-        setLogo();
-        setButton("방 만들기", 200, 500, popUpCreateRoomFrame());
-        setButton("게임 참가하기", 200, 300, popUpFindRoomFrame());
+
     }
 
     private void setLogo() {

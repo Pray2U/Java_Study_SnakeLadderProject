@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server extends Thread{
+public class Server extends Thread implements MessageSendable{
     private Sender sender;
     private Receiver receiver;
     private JTextArea console;
@@ -16,7 +16,7 @@ public class Server extends Thread{
             ServerSocket serverSocket = null;
             Socket socket = null;
             serverSocket = new ServerSocket(7777);
-            console.append("서버가 준비되었습니다.");
+            console.append("서버가 준비되었습니다.\n");
 
             socket = serverSocket.accept();
 

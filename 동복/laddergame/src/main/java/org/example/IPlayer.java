@@ -6,4 +6,6 @@ public interface IPlayer {
     boolean isFinished();
     void initialize();
     int getPosition();
+    boolean getTurn();
+    void setTurn(boolean turn);
 }

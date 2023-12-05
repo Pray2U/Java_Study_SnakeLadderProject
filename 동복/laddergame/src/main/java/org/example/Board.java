@@ -24,6 +24,10 @@ public class Board implements IBoard{
         return board[position];
     }
 
+    public int[] getBoardInfo() {
+        return this.board;
+    }
+
     private void createLadders(LadderDirection direction, int ladderNumber) {
         while(ladderNumber > 0) {
             ladderNumber--;
@@ -33,8 +37,10 @@ public class Board implements IBoard{
             int ladderStart = ladder.getStart();
             int ladderEnd = ladder.getEnd();
 
-            if(board[ladderStart] == 0 && board[ladderEnd] == 0) {
+            if(board[ladderStart] == ladderStart && board[ladderEnd] == ladderEnd) {
                 board[ladderStart] = ladderEnd;
+            }else {
+                ladderNumber++;
             }
         }
     }

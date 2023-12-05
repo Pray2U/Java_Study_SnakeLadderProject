@@ -1,5 +1,8 @@
 package org.example.view.frame;
 
+import org.example.IPlayer;
+import org.example.Player;
+import org.example.SnakeLadderGame;
 import org.example.model.Dice;
 import org.example.network.Client;
 import org.example.network.Server;
@@ -14,42 +17,52 @@ public class GameFrame extends JFrame {
 
     JTextArea console = new JTextArea();
     JScrollPane scrollPane = new JScrollPane(console);
-    BoardPanel boardPanel = new BoardPanel("images/board.png");
     CustomButton rollButton;
-    JLabel dicePanel;
+    JLabel dicePanel = new JLabel();
+    SnakeLadderGame snakeLadderGame = new SnakeLadderGame();
+    BoardPanel boardPanel = new BoardPanel("images/board.png", snakeLadderGame.getBoard());
 
-    public GameFrame(String serverIp){
+    ActionListener diceAction = e -> {
+        rollDice();
+    };
+
+
+    {
         initializeFrame();
         getContentPane().setBackground(Color.BLACK);
         setBoardPanel();
         setConsole();
         setDicePanel(Dice.ONE);
-        setButton("Roll!", 850, 550, null);
-        System.out.println("접속 시도 IP : " + serverIp);
+        setButton("Roll!", 850, 550, diceAction);
+    }
+
+    public GameFrame(String serverIp){
         Client client = new Client(console);
         client.connect(serverIp);
         client.send(client.getLocalAddress() + "님이 접속 했습니다. \n");
         console.append("당신은 Player2 입니다.\n");
         client.send("게임을 시작합니다.");
+        snakeLadderGame.setCurrentPlayer(new Player("Player2", false));
+        snakeLadderGame.setOpponentPlayer(new Player("Player1", true));
+        snakeLadderGame.startGame();
+        boardPanel.setLadder(snakeLadderGame.getBoard());
     }
 
     public GameFrame(){
         Server server = new Server();
         server.setConsole(console);
         server.start();
-        initializeFrame();
-        getContentPane().setBackground(Color.BLACK);
-        setBoardPanel();
-        setConsole();
-        setDicePanel(Dice.ONE);
-        setButton("Roll!", 850, 550, null);
         console.append("당신은 Player1 입니다.\n");
         console.append("다른 유저가 접속하면 게임을 시작 합니다.\n");
+        snakeLadderGame.setCurrentPlayer(new Player("Player1", true));
+        snakeLadderGame.setOpponentPlayer(new Player("Player2", false));
+        snakeLadderGame.startGame();
+        boardPanel.setLadder(snakeLadderGame.getBoard());
     }
 
     private void initializeFrame() {
         setTitle("뱀 사다리 게임");
-        setSize(1015, 700);
+        setSize(1000, 700);
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
         setResizable(false);
@@ -77,7 +90,6 @@ public class GameFrame extends JFrame {
     }
 
     private void setDicePanel(Dice number) {
-        dicePanel = new JLabel();
 
         ImageIcon icon = new ImageIcon(number.getUrl());
 
@@ -99,5 +111,10 @@ public class GameFrame extends JFrame {
         String text = console.getText();
         String[] lines = text.split("\n");
         return lines[lines.length - 1];
+    }
+
+    private void rollDice() {
+        Dice dice = Dice.roll();
+        setDicePanel(dice);
     }
 }

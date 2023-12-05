@@ -1,13 +1,21 @@
 package org.example;
 
-import org.example.model.Dice;
-
 public class Player implements IPlayer {
+    private boolean turn;
     private int position;
     private String nickname;
 
-    public Player(String nickname) {
+    public Player(String nickname, boolean turn) {
         this.nickname = nickname;
+        this.turn = turn;
+    }
+
+    public boolean getTurn() {
+        return turn;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
     }
 
     public String getNickname() {

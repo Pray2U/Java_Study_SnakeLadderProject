@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.net.Socket;
 
 
-public class Client {
+public class Client implements MessageSendable{
     public Client(JTextArea console) {
         this.console = console;
     }

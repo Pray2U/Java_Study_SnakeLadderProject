@@ -5,4 +5,5 @@ public interface IBoard {
     void clearBoard();
 
     int positionCheck(int position);
+    int[] getBoardInfo();
 }
