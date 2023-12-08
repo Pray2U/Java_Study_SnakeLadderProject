@@ -9,6 +9,9 @@ public class BoardPanel extends JPanel{
 
     Image backgroundImg;
     Board board;
+    JLabel player1 = new JLabel();
+    JLabel player2 = new JLabel();
+
 
     public BoardPanel(String url, Board board) {
         setLayout(null);
@@ -16,6 +19,7 @@ public class BoardPanel extends JPanel{
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image img = toolkit.getImage(url);
         this.backgroundImg = img.getScaledInstance(1000, 500, Image.SCALE_SMOOTH);
+        setPlayer();
     }
 
 
@@ -63,5 +67,37 @@ public class BoardPanel extends JPanel{
 
         add(fromImgLabel);
         add(toImgLabel);
+    }
+
+    public void movePlayer(boolean isPlayer1) {
+        JLabel player;
+        if(isPlayer1) {
+            player = this.player1;
+        }else {
+            player = player2;
+        }
+    }
+
+    public void setPlayer() {
+        ImageIcon icon = new ImageIcon("images/horse1.png");
+        ImageIcon icon2 = new ImageIcon("images/horse2.png");
+
+        Image p1 = icon.getImage();
+        Image p2 = icon2.getImage();
+
+        Image p1Image = p1.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image p2Image = p2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+
+        ImageIcon updateP1Icon = new ImageIcon(p1Image);
+        ImageIcon updateP2Icon = new ImageIcon(p2Image);
+
+        player1.setBounds(10, 440, 50, 50);
+        player2.setBounds(40, 440, 50, 50);
+
+        player1.setIcon(updateP1Icon);
+        player2.setIcon(updateP2Icon);
+
+        add(player1);
+        add(player2);
     }
 }
