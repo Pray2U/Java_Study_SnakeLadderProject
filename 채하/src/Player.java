@@ -1,8 +1,8 @@
 import java.util.Scanner;
 public class Player {
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     private int position;
-    String playerColor;
+    private String playerColor;
 
     Player(String colorName){
         playerColor = colorName;
@@ -35,5 +35,7 @@ public class Player {
     public String getPlayerColor() {
         return playerColor;
     }
+
+
 
 }

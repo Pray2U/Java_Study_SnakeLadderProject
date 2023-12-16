@@ -3,11 +3,11 @@ import java.util.stream.Collectors;
 
 class GameBorad {
 
-    static final Map<String,String> colorMap = new HashMap<>();
+    private static final Map<String,String> colorMap = new HashMap<>();
 
     public static final int GameSize = 100;
     public static final int EventCount = 5;
-    static ArrayList<Event> GameArr;
+    private static ArrayList<Event> GameArr;
 
     GameBorad(){
         colorMap.put("red","\u001B[31m");
@@ -46,7 +46,7 @@ class GameBorad {
         int count = 0;
 
         //플레이어 위치와 색 추출
-        Map<Integer, String> playerInfoMap = Game.Players.stream()
+        Map<Integer, String> playerInfoMap = Game.getPlayers().stream()
                 .collect(Collectors.toMap(
                         player -> player.getPosition(),
                         player -> player.getPlayerColor(),
@@ -59,7 +59,7 @@ class GameBorad {
                 if (GameArr.get(count) != null){
                     System.out.printf("%-3d > %-3d", count + 1 ,GameArr.get(count).moveNum+1);
                 } else if (playerInfoMap.containsKey(count)) {
-                        System.out.printf(colorMap.get(playerInfoMap.get(count))+"%-8d "+colorMap.get("exit"), count + 1);
+                    System.out.printf(colorMap.get(playerInfoMap.get(count))+"%-8d "+colorMap.get("exit"), count + 1);
 
                 }else{
                     System.out.printf("%-8d ", count + 1);
