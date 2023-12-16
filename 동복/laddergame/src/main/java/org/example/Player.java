@@ -26,12 +26,13 @@ public class Player implements IPlayer {
         position += distance;
         if(!isFinished()) {
             position = board.positionCheck(position);
+        }else {
+            position = 59;
         }
-
     }
 
     public boolean isFinished() {
-        return position >= 60;
+        return position >= 59;
     }
 
     public void initialize() {

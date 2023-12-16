@@ -7,7 +7,14 @@ import java.util.Arrays;
 
 public class Board implements IBoard{
 
-    private final int[] board = new int[61];
+    private int[] board = new int[61];
+
+    public Board() {
+    }
+
+    public Board(int[] board) {
+        this.board = board;
+    }
 
     public void createBoard(int upLadder, int downLadder) {
         createLadders(LadderDirection.UP, upLadder);

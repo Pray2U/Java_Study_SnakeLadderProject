@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class Sender{
     private Socket socket;
     private DataOutputStream out;
-    private String name;
     private JTextArea console;
 
     public Sender(Socket socket, JTextArea console) {
@@ -18,7 +17,6 @@ public class Sender{
 
         try {
             out = new DataOutputStream(socket.getOutputStream());
-            name = "[" + socket.getInetAddress() + ":" + socket.getPort() + "]";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -26,7 +24,9 @@ public class Sender{
 
     public void send(String str) {
         try {
-            console.append(str);
+            if(!str.startsWith("board")) {
+                console.append(str);
+            }
             out.writeUTF(str);
         } catch (IOException e) {
             e.printStackTrace();

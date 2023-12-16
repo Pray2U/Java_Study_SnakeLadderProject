@@ -5,29 +5,40 @@ import org.example.Player;
 import org.example.SnakeLadderGame;
 import org.example.model.Dice;
 import org.example.network.Client;
+import org.example.network.MessageSendable;
 import org.example.network.Server;
-import org.example.view.Panel.BoardPanel;
+import org.example.view.panel.BoardPanel;
 import org.example.view.component.CustomButton;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GameFrame extends JFrame {
 
-    JTextArea console = new JTextArea();
-    JScrollPane scrollPane = new JScrollPane(console);
-    CustomButton rollButton;
-    JLabel dicePanel = new JLabel();
-    SnakeLadderGame snakeLadderGame = new SnakeLadderGame();
-    BoardPanel boardPanel = new BoardPanel("images/board.png", snakeLadderGame.getBoard());
+    private JTextArea console = new JTextArea();
+    private JScrollPane scrollPane = new JScrollPane(console);
+    private CustomButton rollButton;
+    private JLabel dicePanel = new JLabel();
+    private SnakeLadderGame snakeLadderGame = new SnakeLadderGame();
+    private BoardPanel boardPanel = new BoardPanel("images/board.png", snakeLadderGame.getBoard());
+    private MessageSendable sender;
+    Document doc = console.getDocument();
 
-    ActionListener diceAction = e -> {
-        rollDice();
+
+    private ActionListener diceAction = e -> {
+        if(snakeLadderGame.isCurrentPlayerTurn()){
+            rollDice();
+        }else {
+            console.append("아직 차례가 아닙니다. 차례가 돌아올 때까지 기다려주세요.\n");
+        }
     };
 
-
     {
+        addDocumentListener();
         initializeFrame();
         getContentPane().setBackground(Color.BLACK);
         setBoardPanel();
@@ -37,20 +48,21 @@ public class GameFrame extends JFrame {
     }
 
     public GameFrame(String serverIp){
-        Client client = new Client(console);
+        Client client = new Client(console, snakeLadderGame, boardPanel);
+        sender = client;
         client.connect(serverIp);
         client.send(client.getLocalAddress() + "님이 접속 했습니다. \n");
         console.append("당신은 Player2 입니다.\n");
-        client.send("게임을 시작합니다.");
+        client.send("게임을 시작합니다.\n");
         snakeLadderGame.setCurrentPlayer(new Player("Player2", false));
         snakeLadderGame.setOpponentPlayer(new Player("Player1", true));
         snakeLadderGame.startGame();
-        boardPanel.setLadder(snakeLadderGame.getBoard());
+        sender.send("Player1의 턴입니다.\n");
     }
 
     public GameFrame(){
-        Server server = new Server();
-        server.setConsole(console);
+        Server server = new Server(console, snakeLadderGame, boardPanel);
+        sender = server;
         server.start();
         console.append("당신은 Player1 입니다.\n");
         console.append("다른 유저가 접속하면 게임을 시작 합니다.\n");
@@ -107,14 +119,40 @@ public class GameFrame extends JFrame {
         add(dicePanel);
     }
 
-    private String readConsole() {
-        String text = console.getText();
-        String[] lines = text.split("\n");
-        return lines[lines.length - 1];
-    }
-
     private void rollDice() {
         Dice dice = Dice.roll();
+        snakeLadderGame.startTurn(dice.getNumber());
         setDicePanel(dice);
+
+        IPlayer currentPlayer = snakeLadderGame.getCurrentPlayer();
+        boardPanel.movePlayer(currentPlayer);
+        boardPanel.repaint();
+
+        IPlayer opponentPlayer = snakeLadderGame.getOpponentPlayer();
+        sender.send("roll:" + dice.getNumber() + "\n");
+        sender.send(opponentPlayer.getNickname() + "의 턴입니다.\n");
+        if (currentPlayer.isFinished()) {
+           console.append(currentPlayer.getNickname() + "이 승리하였습니다!!\n");
+        }
     }
+
+    private void addDocumentListener() {
+        doc.addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+            }
+        });
+    }
+
 }

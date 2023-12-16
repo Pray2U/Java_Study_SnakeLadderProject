@@ -1,4 +1,4 @@
-package org.example.view.Panel;
+package org.example.view.panel;
 
 import org.example.view.frame.FindRoomFrame;
 import org.example.view.component.CustomButton;

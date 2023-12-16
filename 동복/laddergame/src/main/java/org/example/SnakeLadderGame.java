@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.model.Dice;
 
 public class SnakeLadderGame {
 
@@ -25,16 +24,21 @@ public class SnakeLadderGame {
         winner = null;
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public Board getBoard() {
         return board;
     }
 
-    public void startTurn(boolean myTurn) {
+
+    public void startTurn(int distance) {
 
         IPlayer curPlayer;
         IPlayer nextPlayer;
 
-        if(myTurn) {
+        if(currentPlayer.getTurn()) {
             curPlayer = currentPlayer;
             nextPlayer = opponentPlayer;
         }else {
@@ -43,7 +47,6 @@ public class SnakeLadderGame {
         }
 
         if (curPlayer.getTurn()) {
-            int distance = Dice.roll().getNumber();
             curPlayer.move(distance, board);
 
             if (curPlayer.isFinished()) {
@@ -55,4 +58,19 @@ public class SnakeLadderGame {
         }
     }
 
+    public IPlayer getWinner() {
+        return winner;
+    }
+
+    public boolean isCurrentPlayerTurn() {
+        return currentPlayer.getTurn();
+    }
+
+    public IPlayer getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public IPlayer getOpponentPlayer() {
+        return opponentPlayer;
+    }
 }

@@ -1,16 +1,17 @@
-package org.example.view.Panel;
+package org.example.view.panel;
 
 import org.example.Board;
+import org.example.IPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class BoardPanel extends JPanel{
 
-    Image backgroundImg;
-    Board board;
-    JLabel player1 = new JLabel();
-    JLabel player2 = new JLabel();
+    private Image backgroundImg;
+    private Board board;
+    private JLabel player1 = new JLabel();
+    private JLabel player2 = new JLabel();
 
 
     public BoardPanel(String url, Board board) {
@@ -18,7 +19,7 @@ public class BoardPanel extends JPanel{
         this.board = board;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image img = toolkit.getImage(url);
-        this.backgroundImg = img.getScaledInstance(1000, 500, Image.SCALE_SMOOTH);
+        this.backgroundImg = img.getScaledInstance(1000, 500, Image.SCALE_DEFAULT);
         setPlayer();
     }
 
@@ -58,9 +59,8 @@ public class BoardPanel extends JPanel{
         ImageIcon updateFromIcon = new ImageIcon(fromImg);
         ImageIcon updateToIcon = new ImageIcon(toImg);
 
-
-        fromImgLabel.setBounds((100 * (from % 10)) + 35, 500 - ((500 / 6) * (from / 10)) + 25, 30, 30);
-        toImgLabel.setBounds((100 * (to % 10)) + 35, 500 - ((500 / 6) * (to / 10)) + 35, 20, 20);
+        fromImgLabel.setBounds((100 * (from % 10)) + 35, 440 - ((500 / 6) * (from / 10)), 30, 30);
+        toImgLabel.setBounds((100 * (to % 10)) + 35, 440 - ((500 / 6) * (to / 10)), 20, 20);
 
         fromImgLabel.setIcon(updateFromIcon);
         toImgLabel.setIcon(updateToIcon);
@@ -69,35 +69,38 @@ public class BoardPanel extends JPanel{
         add(toImgLabel);
     }
 
-    public void movePlayer(boolean isPlayer1) {
-        JLabel player;
-        if(isPlayer1) {
-            player = this.player1;
+    public void movePlayer(IPlayer player) {
+
+        int position = player.getPosition();
+
+        JLabel playerLabel;
+        if(player.getNickname().equals("Player1")) {
+            playerLabel = player1;
+            playerLabel.setLocation( (100 * (position % 10)) + 10, 440 - ((500 / 6) * (position / 10)));
         }else {
-            player = player2;
+            playerLabel = player2;
+            playerLabel.setLocation((100 * (position % 10)) + 40, 440 - ((500 / 6) * (position / 10)));
         }
     }
 
     public void setPlayer() {
-        ImageIcon icon = new ImageIcon("images/horse1.png");
-        ImageIcon icon2 = new ImageIcon("images/horse2.png");
-
-        Image p1 = icon.getImage();
-        Image p2 = icon2.getImage();
-
-        Image p1Image = p1.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        Image p2Image = p2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-
-        ImageIcon updateP1Icon = new ImageIcon(p1Image);
-        ImageIcon updateP2Icon = new ImageIcon(p2Image);
+        ImageIcon icon = getHorseImageIcon("images/horse2.png");
+        ImageIcon icon2 = getHorseImageIcon("images/horse1.png");
 
         player1.setBounds(10, 440, 50, 50);
         player2.setBounds(40, 440, 50, 50);
 
-        player1.setIcon(updateP1Icon);
-        player2.setIcon(updateP2Icon);
+        player1.setIcon(icon);
+        player2.setIcon(icon2);
 
         add(player1);
         add(player2);
+    }
+
+    public ImageIcon getHorseImageIcon(String imgUrl) {
+        ImageIcon icon = new ImageIcon(imgUrl);
+        Image i = icon.getImage();
+        Image image = i.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        return new ImageIcon(image);
     }
 }

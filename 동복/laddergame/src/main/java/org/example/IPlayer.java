@@ -8,4 +8,5 @@ public interface IPlayer {
     int getPosition();
     boolean getTurn();
     void setTurn(boolean turn);
+    String getNickname();
 }

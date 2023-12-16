@@ -1,6 +1,6 @@
 package org.example.view.frame;
 
-import org.example.view.Panel.MainPanel;
+import org.example.view.panel.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
